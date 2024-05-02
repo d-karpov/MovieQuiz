@@ -121,11 +121,19 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D34408342BE3B43B0017C89A /* Fonts */ = {
+		D30685672BE406A800619223 /* YS Display */ = {
 			isa = PBXGroup;
 			children = (
 				D34408322BE3B43B0017C89A /* YS Display-Bold.ttf */,
 				D34408332BE3B43B0017C89A /* YS Display-Medium.ttf */,
+			);
+			path = "YS Display";
+			sourceTree = "<group>";
+		};
+		D34408342BE3B43B0017C89A /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D30685672BE406A800619223 /* YS Display */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
