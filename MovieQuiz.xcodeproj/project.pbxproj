@@ -16,8 +16,8 @@
 		AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5EE5DD284D7887003966EF /* UIColor+Extensions.swift */; };
 		AD77F5742857F8810062FB14 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD77F5732857F8810062FB14 /* Date+Extensions.swift */; };
 		AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD7AFA542836189F00399704 /* Array+Extensions.swift */; };
-		D34408352BE3B43B0017C89A /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D34408322BE3B43B0017C89A /* YS Display-Bold.ttf */; };
-		D34408362BE3B43B0017C89A /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D34408332BE3B43B0017C89A /* YS Display-Medium.ttf */; };
+		D39DA6BB2BE5375D00907E31 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D34408332BE3B43B0017C89A /* YS Display-Medium.ttf */; };
+		D39DA6BC2BE5376200907E31 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D34408322BE3B43B0017C89A /* YS Display-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,19 +121,11 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D30685672BE406A800619223 /* YS Display */ = {
+		D34408342BE3B43B0017C89A /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
 				D34408322BE3B43B0017C89A /* YS Display-Bold.ttf */,
 				D34408332BE3B43B0017C89A /* YS Display-Medium.ttf */,
-			);
-			path = "YS Display";
-			sourceTree = "<group>";
-		};
-		D34408342BE3B43B0017C89A /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				D30685672BE406A800619223 /* YS Display */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -199,9 +191,9 @@
 			files = (
 				AD1ABABE2831907F00B3E448 /* LaunchScreen.storyboard in Resources */,
 				AD1ABABB2831907F00B3E448 /* Assets.xcassets in Resources */,
+				D39DA6BC2BE5376200907E31 /* YS Display-Bold.ttf in Resources */,
 				AD1ABAB92831907B00B3E448 /* Main.storyboard in Resources */,
-				D34408352BE3B43B0017C89A /* YS Display-Bold.ttf in Resources */,
-				D34408362BE3B43B0017C89A /* YS Display-Medium.ttf in Resources */,
+				D39DA6BB2BE5375D00907E31 /* YS Display-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,12 +2,9 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController {
 	//MARK: - IBOutlets
-	@IBOutlet weak private var questionTitleLabel: UILabel!
 	@IBOutlet weak private var counterLabel: UILabel!
 	@IBOutlet weak private var questionLabel: UILabel!
 	@IBOutlet weak private var coverImageView: UIImageView!
-	@IBOutlet weak private var noButton: UIButton!
-	@IBOutlet weak private var yesButton: UIButton!
 	
 	//MARK: - Private variables
 	private var currentQuestionIndex: Int = 0
@@ -88,7 +85,6 @@ final class MovieQuizViewController: UIViewController {
 	// MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		setUpFonts()
 		showFirstQuestion()
 	}
 	
@@ -125,7 +121,7 @@ final class MovieQuizViewController: UIViewController {
 	private func showNextQuestionOrResult() {
 		if currentQuestionIndex == questions.count - 1 {
 			let result = QuizResultViewModel(
-				title: "Этот раунд окнчен!",
+				title: "Этот раунд окончен!",
 				text: "Ваш результат: \(correctAnswers)/\(questions.count)",
 				buttonText: "Сыграть ещё раз"
 			)
@@ -160,17 +156,6 @@ final class MovieQuizViewController: UIViewController {
 		alert.addAction(action)
 		
 		self.present(alert, animated: true)
-	}
-	
-	private func setUpFonts() {
-		let mediumSizeM = UIFont(name: "YSDisplay-Medium", size: 20.0)
-		let boldSizeM = UIFont(name: "YSDisplay-Bold", size: 23.0)
-		
-		questionTitleLabel.font = mediumSizeM
-		counterLabel.font = mediumSizeM
-		questionLabel.font = boldSizeM
-		noButton.titleLabel?.font = mediumSizeM
-		yesButton.titleLabel?.font = mediumSizeM
 	}
 
 	//MARK: - IBActions
