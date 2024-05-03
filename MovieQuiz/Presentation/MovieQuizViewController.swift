@@ -5,6 +5,8 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak private var counterLabel: UILabel!
 	@IBOutlet weak private var questionLabel: UILabel!
 	@IBOutlet weak private var coverImageView: UIImageView!
+	@IBOutlet weak private var noButton: UIButton!
+	@IBOutlet weak private var yesButton: UIButton!
 	
 	//MARK: - Private variables
 	private var currentQuestionIndex: Int = 0
@@ -88,6 +90,10 @@ final class MovieQuizViewController: UIViewController {
 		showFirstQuestion()
 	}
 	
+	override var preferredStatusBarStyle: UIStatusBarStyle {
+		.lightContent
+	}
+	
 	//MARK: - Private methods
 	private func convert(model: QuizQuestion) -> QuizStepViewModel {
 			return QuizStepViewModel(
@@ -113,8 +119,12 @@ final class MovieQuizViewController: UIViewController {
 		if isCorrect {
 			correctAnswers += 1
 		}
+		yesButton.isEnabled = false
+		noButton.isEnabled = false
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
 			self.showNextQuestionOrResult()
+			self.yesButton.isEnabled = true
+			self.noButton.isEnabled = true
 		}
 	}
 	
