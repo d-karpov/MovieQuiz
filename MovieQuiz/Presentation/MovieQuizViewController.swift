@@ -85,13 +85,16 @@ final class MovieQuizViewController: UIViewController {
 	]
 	
 	// MARK: - Lifecycle
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		showFirstQuestion()
-	}
 	
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		.lightContent
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		yesButton.isExclusiveTouch = true
+		noButton.isExclusiveTouch = true
+		showFirstQuestion()
 	}
 	
 	//MARK: - Private methods
