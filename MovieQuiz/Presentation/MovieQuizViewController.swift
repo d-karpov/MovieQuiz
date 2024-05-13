@@ -107,7 +107,6 @@ final class MovieQuizViewController: UIViewController {
 		}
 	
 	private func show(quiz step: QuizStepViewModel) {
-		//убираем рамку-результат, так как по макету вопрос без ответа не имеет рамки
 		coverImageView.layer.borderWidth = 0
 		
 		coverImageView.image = step.image
