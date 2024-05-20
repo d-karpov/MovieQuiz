@@ -7,10 +7,14 @@
 
 import UIKit
 
-final class AlertPresenter: AlertPresenterProtocol {
+protocol ResultAlertPresenterProtocol {
+	func show(with model: QuizResultsViewModel)
+}
+
+final class ResultAlertPresenter: ResultAlertPresenterProtocol {
 	weak var view: UIViewController?
 	
-	func show(with model: AlertModel) {
+	func show(with model: QuizResultsViewModel) {
 		let alert = UIAlertController(
 			title: model.title,
 			message: model.message,

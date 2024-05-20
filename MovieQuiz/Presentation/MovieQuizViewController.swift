@@ -14,7 +14,7 @@ final class MovieQuizViewController: UIViewController {
 	private let questionsAmount = 10
 	private var questionFactory: QuestionFactoryProtocol?
 	private var currentQuestion: QuizQuestion?
-	private var alertPresenter: AlertPresenterProtocol?
+	private var alertPresenter: ResultAlertPresenterProtocol?
 
 // MARK: - Lifecycle
 	override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -28,7 +28,7 @@ final class MovieQuizViewController: UIViewController {
 		questionFactory.delegate = self
 		self.questionFactory = questionFactory
 		
-		let alertPresenter = AlertPresenter()
+		let alertPresenter = ResultAlertPresenter()
 		alertPresenter.view = self
 		self.alertPresenter = alertPresenter
 		
@@ -73,11 +73,9 @@ final class MovieQuizViewController: UIViewController {
 	
 	private func showNextQuestionOrResult() {
 		if currentQuestionIndex == questionsAmount - 1 {
-			let message = correctAnswers == questionsAmount ?
-			"Поздравляем, вы ответили на 10 из 10!" : "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
-			let result = AlertModel(
+			let result = QuizResultsViewModel(
 				title: "Этот раунд окончен!",
-				message: message,
+				message: "Ваш результат: \(correctAnswers)/\(questionsAmount)",
 				buttonText: "Сыграть ещё раз",
 				completion: showFirstQuestion
 			)
