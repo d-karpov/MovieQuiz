@@ -15,6 +15,7 @@ final class MovieQuizViewController: UIViewController {
 	private var questionFactory: QuestionFactoryProtocol?
 	private var currentQuestion: QuizQuestion?
 	private var alertPresenter: ResultAlertPresenterProtocol?
+	private let statisticService: StatisticServiceProtocol = StatisticServiceImplementation.shared
 
 // MARK: - Lifecycle
 	override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -73,9 +74,11 @@ final class MovieQuizViewController: UIViewController {
 	
 	private func showNextQuestionOrResult() {
 		if currentQuestionIndex == questionsAmount - 1 {
+			statisticService.store(correct: correctAnswers, total: questionsAmount)
+			let message = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n"
 			let result = QuizResultsViewModel(
 				title: "Этот раунд окончен!",
-				message: "Ваш результат: \(correctAnswers)/\(questionsAmount)",
+				message: message + statisticService.getStatisticMessage(),
 				buttonText: "Сыграть ещё раз",
 				completion: showFirstQuestion
 			)
