@@ -7,18 +7,16 @@
 
 import Foundation
 
+//MARK: - StatisticServiceProtocol
 protocol StatisticServiceProtocol {
-	var totalAccuracy: Double { get }
-	var gamesCount: Int { get }
-	var bestGame: GameRecord { get }
-	
 	func store(correct count: Int, total amount: Int)
 	func getStatisticMessage() -> String
 }
 
-final class StatisticServiceImplementation: StatisticServiceProtocol {
+//MARK: - StatisticService
+final class StatisticService {
 	
-	static let shared = StatisticServiceImplementation()
+	static let shared = StatisticService()
 	
 	private init() { }
 	
@@ -46,11 +44,11 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
 		}
 	}
 	
-	var totalAccuracy: Double {
+	private var totalAccuracy: Double {
 		(Double(correct)/Double(total))*100
 	}
 	
-	var gamesCount: Int {
+	private var gamesCount: Int {
 		get {
 			usersDefaults.integer(forKey: UserDefaultsKeys.gameCount.rawValue)
 		} set {
@@ -58,10 +56,10 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
 		}
 	}
 	
-	var bestGame: GameRecord {
+	private var bestGame: GameRecord {
 		get {
 			guard let data = usersDefaults.data(forKey: UserDefaultsKeys.bestGame.rawValue),
-				  let record = try? decoder.decode(GameRecord.self, from: data) 
+				  let record = try? decoder.decode(GameRecord.self, from: data)
 			else {
 				return .init(correct: 0, total: 0, date: .now)
 			}
@@ -74,6 +72,10 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
 			usersDefaults.set(data, forKey: UserDefaultsKeys.bestGame.rawValue)
 		}
 	}
+}
+
+//MARK: - StatisticServiceProtocol Implementation
+extension StatisticService: StatisticServiceProtocol {
 	
 	func store(correct count: Int, total amount: Int) {
 		gamesCount += 1

@@ -15,7 +15,7 @@ final class MovieQuizViewController: UIViewController {
 	private var questionFactory: QuestionFactoryProtocol?
 	private var currentQuestion: QuizQuestion?
 	private var alertPresenter: ResultAlertPresenterProtocol?
-	private let statisticService: StatisticServiceProtocol = StatisticServiceImplementation.shared
+	private let statisticService: StatisticServiceProtocol = StatisticService.shared
 
 // MARK: - Lifecycle
 	override var preferredStatusBarStyle: UIStatusBarStyle {
