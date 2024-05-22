@@ -40,12 +40,12 @@ final class MovieQuizViewController: UIViewController {
 	
 //MARK: - Private methods
 	private func convert(model: QuizQuestion) -> QuizStepViewModel {
-			return QuizStepViewModel(
-				image: UIImage(named: model.image) ?? UIImage(),
-				question: model.text,
-				questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
-			)
-		}
+		return QuizStepViewModel(
+			image: UIImage(named: model.image) ?? UIImage(),
+			question: model.text,
+			questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
+		)
+	}
 	
 	private func show(quiz step: QuizStepViewModel) {
 		coverImageView.layer.borderWidth = 0
