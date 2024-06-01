@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct QuizResultsViewModel {
+struct QuizResultsViewModel: AlertModelProtocol {
 	let title: String
 	let message: String
 	let buttonText: String

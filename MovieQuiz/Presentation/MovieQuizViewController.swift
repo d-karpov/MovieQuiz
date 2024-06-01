@@ -16,7 +16,7 @@ final class MovieQuizViewController: UIViewController {
 	private let questionsAmount = 10
 	private var questionFactory: QuestionFactoryProtocol?
 	private var currentQuestion: QuizQuestion?
-	private var alertPresenter: ResultAlertPresenterProtocol?
+	private var alertPresenter: AlertPresenterProtocol?
 	private let statisticService: StatisticServiceProtocol = StatisticService.shared
 
 // MARK: - Lifecycle
@@ -33,7 +33,7 @@ final class MovieQuizViewController: UIViewController {
 		questionFactory.delegate = self
 		self.questionFactory = questionFactory
 		
-		let alertPresenter = ResultAlertPresenter()
+		let alertPresenter = AlertPresenter()
 		alertPresenter.view = self
 		self.alertPresenter = alertPresenter
 		
