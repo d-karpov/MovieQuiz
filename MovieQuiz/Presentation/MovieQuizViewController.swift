@@ -7,6 +7,8 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak private var coverImageView: UIImageView!
 	@IBOutlet weak private var noButton: UIButton!
 	@IBOutlet weak private var yesButton: UIButton!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+	@IBOutlet weak var mainStack: UIStackView!
 	
 //MARK: - Private variables
 	private var currentQuestionIndex: Int = 0
@@ -24,6 +26,8 @@ final class MovieQuizViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		showActivityIndicator()
 		
 		let questionFactory = QuestionFactory()
 		questionFactory.delegate = self
@@ -93,6 +97,11 @@ final class MovieQuizViewController: UIViewController {
 		correctAnswers = 0
 		currentQuestionIndex = 0
 		questionFactory?.requestNextQuestion()
+	}
+	
+	private func showActivityIndicator() {
+		activityIndicator.startAnimating()
+		mainStack.isHidden = true
 	}
 
 //MARK: - IBActions
