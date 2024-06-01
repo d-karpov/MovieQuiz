@@ -8,7 +8,6 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak private var noButton: UIButton!
 	@IBOutlet weak private var yesButton: UIButton!
 	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-	@IBOutlet weak var mainStack: UIStackView!
 	
 //MARK: - Private variables
 	private var currentQuestionIndex: Int = 0
@@ -29,9 +28,11 @@ final class MovieQuizViewController: UIViewController {
 		
 		showLoadingIndicator()
 		
-		let questionFactory = QuestionFactory()
-		questionFactory.delegate = self
-		self.questionFactory = questionFactory
+		questionFactory = QuestionFactory(
+			moviesLoader: MoviesLoader(),
+			delegate: self
+		)
+		questionFactory?.loadData()
 		
 		let alertPresenter = AlertPresenter()
 		alertPresenter.view = self
@@ -39,13 +40,12 @@ final class MovieQuizViewController: UIViewController {
 		
 		yesButton.isExclusiveTouch = true
 		noButton.isExclusiveTouch = true
-		showFirstQuestion()
 	}
 	
 //MARK: - Private methods
 	private func convert(model: QuizQuestion) -> QuizStepViewModel {
 		return QuizStepViewModel(
-			image: UIImage(named: model.image) ?? UIImage(),
+			image: UIImage(data: model.image) ?? UIImage(),
 			question: model.text,
 			questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
 		)
@@ -107,15 +107,15 @@ final class MovieQuizViewController: UIViewController {
 		activityIndicator.stopAnimating()
 	}
 	
-	private func showNetworkError() {
+	private func showNetworkError(with message: String) {
 		hideLoadingIndicator()
 
 		let networkAlert = AlertModel(
 			title: "Ошибка",
-			message: "Не вышло загрузить вопросы из сети. Попробуйте ещё раз 😅",
+			message: message,
 			buttonText: "Попробовать ещё раз",
 			completion: {
-				self.showFirstQuestion()
+				self.questionFactory?.loadData()
 			}
 		)
 		
@@ -145,5 +145,14 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
 		DispatchQueue.main.async { [weak self] in
 			self?.show(quiz: viewModel)
 		}
+	}
+	
+	func didLoadDataFromServer() {
+		hideLoadingIndicator()
+		showFirstQuestion()
+	}
+	
+	func didFailToLoadData(with error: Error) {
+		showNetworkError(with: error.localizedDescription)
 	}
 }
