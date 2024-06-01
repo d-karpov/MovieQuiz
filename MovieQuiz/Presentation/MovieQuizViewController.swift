@@ -27,7 +27,7 @@ final class MovieQuizViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		showActivityIndicator()
+		showLoadingIndicator()
 		
 		let questionFactory = QuestionFactory()
 		questionFactory.delegate = self
@@ -99,9 +99,27 @@ final class MovieQuizViewController: UIViewController {
 		questionFactory?.requestNextQuestion()
 	}
 	
-	private func showActivityIndicator() {
+	private func showLoadingIndicator() {
 		activityIndicator.startAnimating()
-		mainStack.isHidden = true
+	}
+	
+	private func hideLoadingIndicator() {
+		activityIndicator.stopAnimating()
+	}
+	
+	private func showNetworkError() {
+		hideLoadingIndicator()
+
+		let networkAlert = AlertModel(
+			title: "Ошибка",
+			message: "Не вышло загрузить вопросы из сети. Попробуйте ещё раз 😅",
+			buttonText: "Попробовать ещё раз",
+			completion: {
+				self.showFirstQuestion()
+			}
+		)
+		
+		alertPresenter?.show(with: networkAlert)
 	}
 
 //MARK: - IBActions
