@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NetworkClient {
+struct NetworkService {
 
 	private enum NetworkError: Error {
 		case codeError
