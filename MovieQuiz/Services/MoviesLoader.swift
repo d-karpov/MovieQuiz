@@ -19,7 +19,6 @@ struct MoviesLoader: MoviesLoaderProtocol {
 		
 		var errorDescription: String? {
 			switch self {
-				
 			case .errorFromAPI(let errorMessage):
 				"\(errorMessage)"
 			}
