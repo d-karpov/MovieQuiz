@@ -8,12 +8,12 @@
 import Foundation
 
 struct NetworkService {
-
+	
 	private enum NetworkError: Error {
 		case codeError
 	}
 	
-	func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {
+	static func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {
 		let request = URLRequest(url: url)
 		
 		let task = URLSession.shared.dataTask(with: request) { data, response, error in

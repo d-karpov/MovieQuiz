@@ -8,6 +8,7 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak private var noButton: UIButton!
 	@IBOutlet weak private var yesButton: UIButton!
 	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+	@IBOutlet weak var mainStackView: UIStackView!
 	
 //MARK: - Private variables
 	private var currentQuestionIndex: Int = 0
@@ -100,6 +101,7 @@ final class MovieQuizViewController: UIViewController {
 	}
 	
 	private func showLoadingIndicator() {
+		mainStackView.isHidden = true
 		activityIndicator.startAnimating()
 	}
 	
@@ -115,6 +117,7 @@ final class MovieQuizViewController: UIViewController {
 			message: message,
 			buttonText: "Попробовать ещё раз",
 			completion: {
+				self.showLoadingIndicator()
 				self.questionFactory?.loadData()
 			}
 		)
@@ -143,6 +146,7 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
 		let viewModel = convert(model: question)
 		
 		DispatchQueue.main.async { [weak self] in
+			self?.mainStackView.isHidden = false
 			self?.show(quiz: viewModel)
 		}
 	}

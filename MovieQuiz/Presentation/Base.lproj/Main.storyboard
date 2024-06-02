@@ -126,6 +126,7 @@
                         <outlet property="activityIndicator" destination="tyf-H8-eeZ" id="4rU-p7-77n"/>
                         <outlet property="counterLabel" destination="P8J-Qf-QlG" id="4e2-3j-Kw8"/>
                         <outlet property="coverImageView" destination="lpF-cO-vRd" id="C0A-j1-2w8"/>
+                        <outlet property="mainStackView" destination="rkr-YF-XNe" id="onn-In-vXP"/>
                         <outlet property="noButton" destination="7qz-mv-Bw9" id="xEV-4V-Nho"/>
                         <outlet property="questionLabel" destination="Pub-bY-ceE" id="Tri-DO-RIh"/>
                         <outlet property="yesButton" destination="d4M-aZ-gN1" id="Xpi-nH-cmX"/>
