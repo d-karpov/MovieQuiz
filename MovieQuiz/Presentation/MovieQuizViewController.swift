@@ -7,6 +7,8 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak private var coverImageView: UIImageView!
 	@IBOutlet weak private var noButton: UIButton!
 	@IBOutlet weak private var yesButton: UIButton!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+	@IBOutlet weak var mainStackView: UIStackView!
 	
 //MARK: - Private variables
 	private var currentQuestionIndex: Int = 0
@@ -14,7 +16,7 @@ final class MovieQuizViewController: UIViewController {
 	private let questionsAmount = 10
 	private var questionFactory: QuestionFactoryProtocol?
 	private var currentQuestion: QuizQuestion?
-	private var alertPresenter: ResultAlertPresenterProtocol?
+	private var alertPresenter: AlertPresenterProtocol?
 	private let statisticService: StatisticServiceProtocol = StatisticService.shared
 
 // MARK: - Lifecycle
@@ -25,23 +27,26 @@ final class MovieQuizViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		let questionFactory = QuestionFactory()
-		questionFactory.delegate = self
-		self.questionFactory = questionFactory
+		showLoadingIndicator()
 		
-		let alertPresenter = ResultAlertPresenter()
+		questionFactory = QuestionFactory(
+			moviesLoader: MoviesLoader(),
+			delegate: self
+		)
+		questionFactory?.loadData()
+		
+		let alertPresenter = AlertPresenter()
 		alertPresenter.view = self
 		self.alertPresenter = alertPresenter
 		
 		yesButton.isExclusiveTouch = true
 		noButton.isExclusiveTouch = true
-		showFirstQuestion()
 	}
 	
 //MARK: - Private methods
 	private func convert(model: QuizQuestion) -> QuizStepViewModel {
 		return QuizStepViewModel(
-			image: UIImage(named: model.image) ?? UIImage(),
+			image: UIImage(data: model.image) ?? UIImage(),
 			question: model.text,
 			questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
 		)
@@ -94,6 +99,31 @@ final class MovieQuizViewController: UIViewController {
 		currentQuestionIndex = 0
 		questionFactory?.requestNextQuestion()
 	}
+	
+	private func showLoadingIndicator() {
+		mainStackView.isHidden = true
+		activityIndicator.startAnimating()
+	}
+	
+	private func hideLoadingIndicator() {
+		activityIndicator.stopAnimating()
+	}
+	
+	private func showNetworkError(with message: String) {
+		hideLoadingIndicator()
+
+		let networkAlert = AlertModel(
+			title: "Ошибка",
+			message: message,
+			buttonText: "Попробовать ещё раз",
+			completion: {
+				self.showLoadingIndicator()
+				self.questionFactory?.loadData()
+			}
+		)
+		
+		alertPresenter?.show(with: networkAlert)
+	}
 
 //MARK: - IBActions
 	@IBAction private func yesButtonClicked(_ sender: UIButton) {
@@ -116,7 +146,17 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
 		let viewModel = convert(model: question)
 		
 		DispatchQueue.main.async { [weak self] in
+			self?.mainStackView.isHidden = false
 			self?.show(quiz: viewModel)
 		}
+	}
+	
+	func didLoadDataFromServer() {
+		hideLoadingIndicator()
+		showFirstQuestion()
+	}
+	
+	func didFailToLoadData(with error: Error) {
+		showNetworkError(with: error.localizedDescription)
 	}
 }

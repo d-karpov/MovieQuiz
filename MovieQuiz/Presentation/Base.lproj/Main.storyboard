@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -107,19 +107,26 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="tyf-H8-eeZ">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
                             <constraint firstItem="rkr-YF-XNe" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="BPJ-lB-smU"/>
                             <constraint firstItem="rkr-YF-XNe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="MxJ-0r-SmZ"/>
+                            <constraint firstItem="tyf-H8-eeZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="NJp-fn-rI9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rkr-YF-XNe" secondAttribute="trailing" constant="20" id="Ru9-kQ-y5B"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rkr-YF-XNe" secondAttribute="bottom" id="ooE-ec-MAX"/>
+                            <constraint firstItem="tyf-H8-eeZ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ylx-iC-1oQ"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="tyf-H8-eeZ" id="4rU-p7-77n"/>
                         <outlet property="counterLabel" destination="P8J-Qf-QlG" id="4e2-3j-Kw8"/>
                         <outlet property="coverImageView" destination="lpF-cO-vRd" id="C0A-j1-2w8"/>
+                        <outlet property="mainStackView" destination="rkr-YF-XNe" id="onn-In-vXP"/>
                         <outlet property="noButton" destination="7qz-mv-Bw9" id="xEV-4V-Nho"/>
                         <outlet property="questionLabel" destination="Pub-bY-ceE" id="Tri-DO-RIh"/>
                         <outlet property="yesButton" destination="d4M-aZ-gN1" id="Xpi-nH-cmX"/>
