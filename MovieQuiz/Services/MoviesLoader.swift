@@ -32,8 +32,14 @@ struct MoviesLoader: MoviesLoaderProtocol {
 		return url
 	}
 	
+	private let networkClient: NetworkServiceProtocol
+	
+	init(networkClient: NetworkServiceProtocol = NetworkService()) {
+		self.networkClient = networkClient
+	}
+	
 	func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
-		NetworkService.fetch(url: mostPopularMoviesUrl) { result in
+		networkClient.fetch(url: mostPopularMoviesUrl) { result in
 			switch result {
 			case .success(let data):
 				do {
