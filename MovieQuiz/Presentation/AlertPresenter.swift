@@ -26,6 +26,7 @@ final class AlertPresenter: AlertPresenterProtocol {
 		}
 		
 		alert.addAction(action)
+		alert.view.accessibilityIdentifier = "Alert"
 		
 		guard let view = view else { return }
 		view.present(alert, animated: true)
