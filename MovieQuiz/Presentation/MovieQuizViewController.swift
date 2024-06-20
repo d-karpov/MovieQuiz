@@ -11,13 +11,12 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak var mainStackView: UIStackView!
 	
 //MARK: - Private variables
-	private var currentQuestionIndex: Int = 0
 	private var correctAnswers: Int = 0
-	private let questionsAmount = 10
 	private var questionFactory: QuestionFactoryProtocol?
 	private var currentQuestion: QuizQuestion?
 	private var alertPresenter: AlertPresenterProtocol?
 	private let statisticService: StatisticServiceProtocol = StatisticService.shared
+	private let presenter = MovieQuizPresenter()
 
 // MARK: - Lifecycle
 	override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -44,14 +43,6 @@ final class MovieQuizViewController: UIViewController {
 	}
 	
 //MARK: - Private methods
-	private func convert(model: QuizQuestion) -> QuizStepViewModel {
-		return QuizStepViewModel(
-			image: UIImage(data: model.image) ?? UIImage(),
-			question: model.text,
-			questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
-		)
-	}
-	
 	private func show(quiz step: QuizStepViewModel) {
 		coverImageView.layer.borderWidth = 0
 		
@@ -78,9 +69,9 @@ final class MovieQuizViewController: UIViewController {
 	}
 	
 	private func showNextQuestionOrResult() {
-		if currentQuestionIndex == questionsAmount - 1 {
-			statisticService.store(correct: correctAnswers, total: questionsAmount)
-			let message = "Ваш результат: \(correctAnswers)/\(questionsAmount)\n"
+		if presenter.isLastQuestion() {
+			statisticService.store(correct: correctAnswers, total: presenter.questionsAmount)
+			let message = "Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)\n"
 			let result = QuizResultsViewModel(
 				title: "Этот раунд окончен!",
 				message: message + statisticService.getStatisticMessage(),
@@ -89,14 +80,14 @@ final class MovieQuizViewController: UIViewController {
 			)
 			alertPresenter?.show(with: result)
 		} else {
-			currentQuestionIndex += 1
+			presenter.switchToNextQuestion()
 			questionFactory?.requestNextQuestion()
 		}
 	}
 	
 	private func showFirstQuestion() {
 		correctAnswers = 0
-		currentQuestionIndex = 0
+		presenter.resetQuestionIndex()
 		questionFactory?.requestNextQuestion()
 	}
 	
@@ -143,7 +134,7 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
 		guard let question = question else { return }
 		
 		currentQuestion = question
-		let viewModel = convert(model: question)
+		let viewModel = presenter.convert(model: question)
 		
 		DispatchQueue.main.async { [weak self] in
 			self?.mainStackView.isHidden = false
