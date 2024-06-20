@@ -14,6 +14,7 @@ protocol MoviesLoaderProtocol {
 
 struct MoviesLoader: MoviesLoaderProtocol {
 	
+//MARK: - Private Variable
 	private enum ErrorsOfAPI: Error, LocalizedError {
 		case errorFromAPI(String)
 		
@@ -33,11 +34,13 @@ struct MoviesLoader: MoviesLoaderProtocol {
 	}
 	
 	private let networkClient: NetworkServiceProtocol
-	
+
+//MARK: - Initialiser
 	init(networkClient: NetworkServiceProtocol = NetworkService()) {
 		self.networkClient = networkClient
 	}
 	
+//MARK: - Public Method
 	func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
 		networkClient.fetch(url: mostPopularMoviesUrl) { result in
 			switch result {

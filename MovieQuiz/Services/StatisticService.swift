@@ -15,11 +15,11 @@ protocol StatisticServiceProtocol {
 
 //MARK: - StatisticService
 final class StatisticService {
-	
+
+//MARK: - Public Variable
 	static let shared = StatisticService()
 	
-	private init() { }
-	
+//MARK: - Private Variable
 	private enum UserDefaultsKeys: String {
 		case correct, total, bestGame, gameCount
 	}
@@ -72,6 +72,9 @@ final class StatisticService {
 			usersDefaults.set(data, forKey: UserDefaultsKeys.bestGame.rawValue)
 		}
 	}
+	
+//MARK: - Initialiser
+	private init() { }
 }
 
 //MARK: - StatisticServiceProtocol Implementation

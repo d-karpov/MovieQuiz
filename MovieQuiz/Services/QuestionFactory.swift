@@ -8,29 +8,37 @@
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
+	
+//MARK: - Public Variable
+	weak var delegate: QuestionFactoryDelegate?
+	
+//MARK: - Private Variable
 	private let moviesLoader: MoviesLoaderProtocol
 	private var movies: [MostPopularMovie] = []
 	
-	weak var delegate: QuestionFactoryDelegate?
-	
+//MARK: - Initialiser
 	init(moviesLoader: MoviesLoaderProtocol, delegate: QuestionFactoryDelegate?) {
 		self.moviesLoader = moviesLoader
 		self.delegate = delegate
 	}
 	
+//MARK: - Public Methods
 	func requestNextQuestion() {
 		DispatchQueue.global().async { [weak self] in
 			guard let self = self else { return }
 			
 			let index = (0..<self.movies.count).randomElement() ?? 0
 			guard let movie = self.movies[safe: index] else { return }
-			var imageData = Data()
+			var imageData: Data?
 			
 			do {
 				imageData = try Data(contentsOf: movie.resizedImageURL)
 			} catch {
-				print("Failed to load image")
+				DispatchQueue.main.async {
+					self.delegate?.didFailToLoadData(with: error)
+				}
 			}
+			guard let imageData = imageData else { return }
 			
 			let rating = Float(movie.rating) ?? 0
 			let text = "Рейтинг этого фильма больше, чем \(Int(rating)) ?"
@@ -45,7 +53,6 @@ final class QuestionFactory: QuestionFactoryProtocol {
 				guard let self = self else { return }
 				self.delegate?.didReceiveNextQuestion(question: question)
 			}
-			
 		}
 	}
 	

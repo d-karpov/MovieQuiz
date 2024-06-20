@@ -7,18 +7,14 @@ final class MovieQuizViewController: UIViewController {
 	@IBOutlet weak private var coverImageView: UIImageView!
 	@IBOutlet weak private var noButton: UIButton!
 	@IBOutlet weak private var yesButton: UIButton!
-	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-	@IBOutlet weak var mainStackView: UIStackView!
+	@IBOutlet weak private var activityIndicator: UIActivityIndicatorView!
+	@IBOutlet weak private var mainStackView: UIStackView!
 	
 //MARK: - Private variables
-	private var correctAnswers: Int = 0
-	private var questionFactory: QuestionFactoryProtocol?
-	private var currentQuestion: QuizQuestion?
-	private var alertPresenter: AlertPresenterProtocol?
-	private let statisticService: StatisticServiceProtocol = StatisticService.shared
-	private lazy var presenter = MovieQuizPresenter(viewController: self)
+	private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(view: self)
+	private lazy var presenter: MovieQuizPresenter = .init(viewController: self)
 
-// MARK: - Lifecycle
+//MARK: - Lifecycle
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 		.lightContent
 	}
@@ -26,24 +22,14 @@ final class MovieQuizViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		showLoadingIndicator()
-		
-		questionFactory = QuestionFactory(
-			moviesLoader: MoviesLoader(),
-			delegate: self
-		)
-		questionFactory?.loadData()
-		
-		let alertPresenter = AlertPresenter()
-		alertPresenter.view = self
-		self.alertPresenter = alertPresenter
+		presenter.startInitialLoading()
 		
 		yesButton.isExclusiveTouch = true
 		noButton.isExclusiveTouch = true
 	}
 	
-//MARK: - Private methods
-	private func show(quiz step: QuizStepViewModel) {
+//MARK: - Public methods
+	func show(quiz step: QuizStepViewModel) {
 		coverImageView.layer.borderWidth = 0
 		
 		coverImageView.image = step.image
@@ -51,56 +37,38 @@ final class MovieQuizViewController: UIViewController {
 		questionLabel.text = step.question
 	}
 	
-	func showAnswerResult(isCorrect: Bool) {
+	func show(quiz result: QuizResultsViewModel) {
+		alertPresenter.show(with: result)
+	}
+	
+	func enableButtons(isEnable: Bool) {
+		yesButton.isEnabled = isEnable
+		noButton.isEnabled = isEnable
+	}
+	
+	func highlightCoverBorder(isCorrectAnswer: Bool) {
 		coverImageView.layer.masksToBounds = true
 		coverImageView.layer.borderWidth = 8
-		coverImageView.layer.borderColor = isCorrect ? UIColor(.ypGreen).cgColor : UIColor(.ypRed).cgColor
-		if isCorrect {
-			correctAnswers += 1
-		}
-		yesButton.isEnabled = false
-		noButton.isEnabled = false
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-			guard let self = self else { return }
-			self.showNextQuestionOrResult()
-			self.yesButton.isEnabled = true
-			self.noButton.isEnabled = true
-		}
+		coverImageView.layer.borderColor = isCorrectAnswer ? UIColor(.ypGreen).cgColor : UIColor(.ypRed).cgColor
 	}
 	
-	private func showNextQuestionOrResult() {
-		if presenter.isLastQuestion() {
-			statisticService.store(correct: correctAnswers, total: presenter.questionsAmount)
-			let message = "Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)\n"
-			let result = QuizResultsViewModel(
-				title: "Этот раунд окончен!",
-				message: message + statisticService.getStatisticMessage(),
-				buttonText: "Сыграть ещё раз",
-				completion: showFirstQuestion
-			)
-			alertPresenter?.show(with: result)
-		} else {
-			presenter.switchToNextQuestion()
-			questionFactory?.requestNextQuestion()
-		}
-	}
-	
-	private func showFirstQuestion() {
-		correctAnswers = 0
-		presenter.resetQuestionIndex()
-		questionFactory?.requestNextQuestion()
-	}
-	
-	private func showLoadingIndicator() {
-		mainStackView.isHidden = true
+	func showLoadingIndicator() {
 		activityIndicator.startAnimating()
 	}
 	
-	private func hideLoadingIndicator() {
+	func hideLoadingIndicator() {
 		activityIndicator.stopAnimating()
 	}
 	
-	private func showNetworkError(with message: String) {
+	func hideMainStackView() {
+		mainStackView.isHidden = true
+	}
+	
+	func showMainStackView() {
+		mainStackView.isHidden = false
+	}
+	
+	func showNetworkError(with message: String) {
 		hideLoadingIndicator()
 
 		let networkAlert = AlertModel(
@@ -108,12 +76,11 @@ final class MovieQuizViewController: UIViewController {
 			message: message,
 			buttonText: "Попробовать ещё раз",
 			completion: {
-				self.showLoadingIndicator()
-				self.questionFactory?.loadData()
+				self.presenter.startInitialLoading()
 			}
 		)
 		
-		alertPresenter?.show(with: networkAlert)
+		alertPresenter.show(with: networkAlert)
 	}
 
 //MARK: - IBActions
@@ -123,29 +90,5 @@ final class MovieQuizViewController: UIViewController {
 	
 	@IBAction private func noButtonClicked(_ sender: UIButton) {
 		presenter.noButtonClicked()
-	}
-}
-
-//MARK: - QuestionFactoryDelegate
-extension MovieQuizViewController: QuestionFactoryDelegate {
-	func didReceiveNextQuestion(question: QuizQuestion?) {
-		guard let question = question else { return }
-		
-		currentQuestion = question
-		let viewModel = presenter.convert(model: question)
-		
-		DispatchQueue.main.async { [weak self] in
-			self?.mainStackView.isHidden = false
-			self?.show(quiz: viewModel)
-		}
-	}
-	
-	func didLoadDataFromServer() {
-		hideLoadingIndicator()
-		showFirstQuestion()
-	}
-	
-	func didFailToLoadData(with error: Error) {
-		showNetworkError(with: error.localizedDescription)
 	}
 }
