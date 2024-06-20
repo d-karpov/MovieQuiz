@@ -75,13 +75,17 @@ final class MovieQuizPresenter {
 	
 	private func proceedAnswerResult(isCorrect: Bool) {
 		viewController?.highlightCoverBorder(isCorrectAnswer: isCorrect)
-		if isCorrect {
-			correctAnswers += 1
-		}
+		didAnswer(isCorrect: isCorrect)
 		viewController?.enableButtons(isEnable: false)
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
 			self?.proceedNextQuestionOrResult()
 			self?.viewController?.enableButtons(isEnable: true)
+		}
+	}
+	
+	private func didAnswer(isCorrect: Bool) {
+		if isCorrect {
+			correctAnswers += 1
 		}
 	}
 	
