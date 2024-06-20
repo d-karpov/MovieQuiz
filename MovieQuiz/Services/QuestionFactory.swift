@@ -81,7 +81,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
 			correctAnswer = rating > questionRating
 			text = "Рейтинг этого фильма \(MoreOrLess.more.rawValue), чем \(questionRating) ?"
 		case .less:
-			correctAnswer = rating < Float(questionRating)
+			correctAnswer = rating < questionRating
 			text = "Рейтинг этого фильма \(MoreOrLess.less.rawValue), чем \(questionRating) ?"
 		}
 		
