@@ -62,7 +62,7 @@ final class MovieQuizUITests: XCTestCase {
 	func testAlertPresent() throws {
 		(1...10).forEach { _ in
 			app.buttons["Yes"].tap()
-			sleep(1)
+			sleep(2)
 		}
 		let alert = app.alerts["Alert"]
 		let alertTitle = alert.label
