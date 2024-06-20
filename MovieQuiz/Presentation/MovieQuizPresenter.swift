@@ -16,10 +16,10 @@ final class MovieQuizPresenter {
 	private var questionFactory: QuestionFactoryProtocol?
 	private let questionsAmount: Int = 10
 	private let statisticService: StatisticServiceProtocol = StatisticService.shared
-	private weak var viewController: MovieQuizViewController?
+	private weak var viewController: MovieQuizViewControllerProtocol?
 	
 //MARK: - Initialiser
-	init(viewController: MovieQuizViewController) {
+	init(viewController: MovieQuizViewControllerProtocol) {
 		self.viewController = viewController
 		questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
 	}
@@ -39,8 +39,8 @@ final class MovieQuizPresenter {
 		didAnswer(isYes: false)
 	}
 	
-//MARK: - Private Methods
-	private func convert(model: QuizQuestion) -> QuizStepViewModel {
+//TODO: Вынесено для тестирования и сдачи, в целом должно быть закрыто как private метод
+	func convert(model: QuizQuestion) -> QuizStepViewModel {
 		QuizStepViewModel(
 			imageData: model.image,
 			question: model.text,
@@ -48,6 +48,7 @@ final class MovieQuizPresenter {
 		)
 	}
 	
+//MARK: - Private Methods
 	private func restartGame() {
 		correctAnswers = 0
 		currentQuestionIndex = 0

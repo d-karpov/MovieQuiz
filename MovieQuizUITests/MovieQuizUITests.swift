@@ -18,8 +18,6 @@ final class MovieQuizUITests: XCTestCase {
 		app.launch()
 		
 		continueAfterFailure = false
-		
-		// In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
 	}
 	
 	override func tearDownWithError() throws {
@@ -76,7 +74,7 @@ final class MovieQuizUITests: XCTestCase {
 	func testAlertDismiss() throws {
 		(1...10).forEach { _ in
 			app.buttons["No"].tap()
-			sleep(1)
+			sleep(2)
 		}
 		let alert = app.alerts["Alert"]
 		let alertButton = alert.buttons.firstMatch

@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
 //MARK: - IBOutlets
 	@IBOutlet weak private var counterLabel: UILabel!
 	@IBOutlet weak private var questionLabel: UILabel!
@@ -60,12 +60,12 @@ final class MovieQuizViewController: UIViewController {
 		activityIndicator.stopAnimating()
 	}
 	
-	func hideMainStackView() {
-		mainStackView.isHidden = true
-	}
-	
 	func showMainStackView() {
 		mainStackView.isHidden = false
+	}
+	
+	func hideMainStackView() {
+		mainStackView.isHidden = true
 	}
 	
 	func showNetworkError(with message: String) {
