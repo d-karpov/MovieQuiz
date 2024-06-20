@@ -32,7 +32,7 @@ final class MovieQuizViewController: UIViewController {
 	func show(quiz step: QuizStepViewModel) {
 		coverImageView.layer.borderWidth = 0
 		
-		coverImageView.image = step.image
+		coverImageView.image = UIImage(data: step.imageData) ?? UIImage(systemName: "photo")
 		counterLabel.text = step.questionNumber
 		questionLabel.text = step.question
 	}

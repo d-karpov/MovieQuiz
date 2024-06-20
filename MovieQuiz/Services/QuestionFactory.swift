@@ -9,20 +9,24 @@ import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
 	
-//MARK: - Public Variable
+	//MARK: - Public Variable
 	weak var delegate: QuestionFactoryDelegate?
 	
-//MARK: - Private Variable
+	//MARK: - Private Variable
 	private let moviesLoader: MoviesLoaderProtocol
 	private var movies: [MostPopularMovie] = []
+	private enum MoreOrLess: String, CaseIterable {
+		case more = "больше"
+		case less = "меньше"
+	}
 	
-//MARK: - Initialiser
+	//MARK: - Initialiser
 	init(moviesLoader: MoviesLoaderProtocol, delegate: QuestionFactoryDelegate?) {
 		self.moviesLoader = moviesLoader
 		self.delegate = delegate
 	}
 	
-//MARK: - Public Methods
+	//MARK: - Public Methods
 	func requestNextQuestion() {
 		DispatchQueue.global().async { [weak self] in
 			guard let self = self else { return }
@@ -40,14 +44,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
 			}
 			guard let imageData = imageData else { return }
 			
-			let rating = Float(movie.rating) ?? 0
-			let text = "Рейтинг этого фильма больше, чем \(Int(rating)) ?"
-			let correctAnswer = rating > Float(Int(rating))
-			let question = QuizQuestion(
-				image: imageData,
-				text: text,
-				correctAnswer: correctAnswer
-			)
+			let question = prepareQuestion(rating: movie.rating, imageData: imageData)
 			
 			DispatchQueue.main.async { [weak self] in
 				guard let self = self else { return }
@@ -70,5 +67,29 @@ final class QuestionFactory: QuestionFactoryProtocol {
 				}
 			}
 		}
+	}
+	
+	private func prepareQuestion(rating: String, imageData: Data) -> QuizQuestion {
+		var correctAnswer: Bool
+		var text: String
+		
+		let rating = Float(rating) ?? 0.0
+		let questionRating = roundf(Float.random(in: (8...9.5)) * 10) / 10.0
+		
+		switch MoreOrLess.allCases.randomElement() ?? .more {
+		case .more:
+			correctAnswer = rating > questionRating
+			text = "Рейтинг этого фильма \(MoreOrLess.more.rawValue), чем \(questionRating) ?"
+		case .less:
+			correctAnswer = rating < Float(questionRating)
+			text = "Рейтинг этого фильма \(MoreOrLess.less.rawValue), чем \(questionRating) ?"
+		}
+		
+		return QuizQuestion(
+			image: imageData,
+			text: text,
+			correctAnswer: correctAnswer
+		)
+		
 	}
 }

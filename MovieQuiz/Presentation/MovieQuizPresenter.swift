@@ -5,7 +5,7 @@
 //  Created by Денис Карпов on 20.06.2024.
 //
 
-import UIKit
+import Foundation
 
 final class MovieQuizPresenter {
 	
@@ -42,7 +42,7 @@ final class MovieQuizPresenter {
 //MARK: - Private Methods
 	private func convert(model: QuizQuestion) -> QuizStepViewModel {
 		QuizStepViewModel(
-			image: UIImage(data: model.image) ?? UIImage(),
+			imageData: model.image,
 			question: model.text,
 			questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)"
 		)
