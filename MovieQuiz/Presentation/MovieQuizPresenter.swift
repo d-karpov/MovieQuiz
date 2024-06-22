@@ -27,6 +27,7 @@ final class MovieQuizPresenter {
 //MARK: - Public Methods
 	func startInitialLoading() {
 		questionFactory?.loadData()
+		viewController?.setOpacityOfContentTo(value: 0.0)
 		viewController?.hideMainStackView()
 		viewController?.showLoadingIndicator()
 	}
@@ -69,6 +70,7 @@ final class MovieQuizPresenter {
 		} else {
 			currentQuestionIndex += 1
 			viewController?.showLoadingIndicator()
+			viewController?.setOpacityOfContentTo(value: 0.0)
 			questionFactory?.requestNextQuestion()
 		}
 	}
@@ -79,7 +81,6 @@ final class MovieQuizPresenter {
 		viewController?.enableButtons(isEnable: false)
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
 			self?.proceedNextQuestionOrResult()
-			self?.viewController?.enableButtons(isEnable: true)
 		}
 	}
 	
@@ -106,6 +107,9 @@ extension MovieQuizPresenter: QuestionFactoryDelegate {
 		DispatchQueue.main.async { [weak self] in
 			self?.viewController?.hideLoadingIndicator()
 			self?.viewController?.show(quiz: viewModel)
+			self?.viewController?.animationOfQuestion()
+			self?.viewController?.setOpacityOfContentTo(value: 1.0)
+			self?.viewController?.enableButtons(isEnable: true)
 		}
 	}
 	
@@ -117,7 +121,18 @@ extension MovieQuizPresenter: QuestionFactoryDelegate {
 	
 	func didFailToLoadData(with error: any Error) {
 		viewController?.hideMainStackView()
-		viewController?.showNetworkError(with: error.localizedDescription)
+		viewController?.hideLoadingIndicator()
+		
+		let networkAlert = AlertModel(
+			title: "Ошибка",
+			message: error.localizedDescription,
+			buttonText: "Попробовать ещё раз",
+			completion: { [weak self] in
+				self?.startInitialLoading()
+			}
+		)
+		
+		viewController?.showNetworkError(with: networkAlert)
 	}
 	
 }

@@ -17,7 +17,9 @@ final class MovieViewControllerMock: MovieQuizViewControllerProtocol {
 	func hideLoadingIndicator() { }
 	func showMainStackView() { }
 	func hideMainStackView() { }
-	func showNetworkError(with message: String) { }
+	func showNetworkError(with networkAlert: AlertModelProtocol) { }
+	func animationOfQuestion() { }
+	func setOpacityOfContentTo(value: Float) { }
 }
 
 final class MovieQuizPresenterTests: XCTestCase {

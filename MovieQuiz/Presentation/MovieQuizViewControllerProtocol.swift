@@ -16,5 +16,7 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
 	func hideLoadingIndicator()
 	func showMainStackView()
 	func hideMainStackView()
-	func showNetworkError(with message: String)
+	func showNetworkError(with networkAlert: AlertModelProtocol)
+	func animationOfQuestion()
+	func setOpacityOfContentTo(value: Float)
 }

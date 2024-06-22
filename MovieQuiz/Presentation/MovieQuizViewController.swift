@@ -68,19 +68,22 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
 		mainStackView.isHidden = true
 	}
 	
-	func showNetworkError(with message: String) {
-		hideLoadingIndicator()
-
-		let networkAlert = AlertModel(
-			title: "Ошибка",
-			message: message,
-			buttonText: "Попробовать ещё раз",
-			completion: {
-				self.presenter.startInitialLoading()
-			}
-		)
-		
+	func showNetworkError(with networkAlert: AlertModelProtocol) {
 		alertPresenter.show(with: networkAlert)
+	}
+	
+	func animationOfQuestion() {
+		let animation = CABasicAnimation(keyPath: "opacity")
+		animation.fromValue = 0.0
+		animation.toValue = 1.0
+		animation.duration = 1.0
+		coverImageView.layer.add(animation, forKey: "opacity")
+		questionLabel.layer.add(animation, forKey: "opacity")
+	}
+	
+	func setOpacityOfContentTo(value: Float) {
+		coverImageView.layer.opacity = value
+		questionLabel.layer.opacity = value
 	}
 
 //MARK: - IBActions
