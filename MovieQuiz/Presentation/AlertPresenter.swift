@@ -12,7 +12,11 @@ protocol AlertPresenterProtocol {
 }
 
 final class AlertPresenter: AlertPresenterProtocol {
-	weak var view: UIViewController?
+	private weak var view: UIViewController?
+	
+	init(view: UIViewController) {
+		self.view = view
+	}
 	
 	func show(with model: AlertModelProtocol) {
 		let alert = UIAlertController(
@@ -26,6 +30,7 @@ final class AlertPresenter: AlertPresenterProtocol {
 		}
 		
 		alert.addAction(action)
+		alert.view.accessibilityIdentifier = "Alert"
 		
 		guard let view = view else { return }
 		view.present(alert, animated: true)
